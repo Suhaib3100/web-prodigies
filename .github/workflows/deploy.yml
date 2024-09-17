@@ -1,0 +1,34 @@
+name: Deploy Discord Bot
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install Bun
+      run: |
+        curl -fsSL https://bun.sh/install | bash
+        echo "Bun installed"
+
+    - name: Set up Bun
+      run: |
+        bun --version
+        bun install
+
+    - name: Start Bot
+      run: |
+        bun run start
+      env:
+        DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
+        DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
+        LLM_API: ${{ secrets.LLM_API }}
+        DATABASE: ${{ secrets.DATABASE }}
+        MONGO: ${{ secrets.MONGO }}
