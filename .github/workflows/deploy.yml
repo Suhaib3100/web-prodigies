@@ -17,12 +17,15 @@ jobs:
       run: |
         curl -fsSL https://bun.sh/install | bash
         echo "Bun installed"
-        echo 'Bun installed'
 
-    - name: Set up Bun
+    - name: Set up Bun Path
       run: |
-        echo "$HOME/.bun/bin" >> $GITHUB_PATH
+        echo "$HOME/.bun/bin" >> $GITHUB_ENV
+        echo "Bun path set"
         bun --version
+
+    - name: Install Dependencies
+      run: |
         bun install
 
     - name: Start Bot
