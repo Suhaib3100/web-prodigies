@@ -20,13 +20,12 @@ jobs:
 
     - name: Set up Bun
       run: |
-        source ~/.bashrc
+        echo 'export PATH="$HOME/.bun/bin:$PATH"' >> $GITHUB_ENV
         bun --version
         bun install
 
     - name: Start Bot
       run: |
-        source ~/.bashrc
         bun run start
       env:
         DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
