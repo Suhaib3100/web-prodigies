@@ -13,25 +13,18 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Install Bun
-      run: |
-        curl -fsSL https://bun.sh/install | bash
-        echo "$HOME/.bun/bin" >> $GITHUB_PATH
-
-    - name: Verify Bun Installation
-      run: |
-        source $HOME/.bashrc  # Ensure .bashrc is sourced to include Bun in the PATH
-        bun --version
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'  # Specify the Node.js version you want
 
     - name: Install Dependencies
       run: |
-        source $HOME/.bashrc  # Ensure .bashrc is sourced to include Bun in the PATH
-        bun install
+        npm install  # Use npm or yarn to install dependencies
 
     - name: Start Bot
       run: |
-        source $HOME/.bashrc  # Ensure .bashrc is sourced to include Bun in the PATH
-        bun run start
+        npm start  # Use npm or yarn to start the bot
       env:
         DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
         DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
