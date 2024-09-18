@@ -13,30 +13,28 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'  # Specify the Node.js version you want
+    - name: Install Bun
+      run: |
+        curl -fsSL https://bun.sh/install | bash
+        echo "$HOME/.bun/bin" >> $GITHUB_PATH
+
+    - name: Ensure Bun is in PATH
+      run: |
+        source $HOME/.bashrc
+        bun --version
 
     - name: Install Dependencies
       run: |
-        npm install  # Use npm or yarn to install dependencies
+        source $HOME/.bashrc
+        bun install
 
     - name: Start Bot
       run: |
-        npm start  # Use npm or yarn to start the bot
+        source $HOME/.bashrc
+        bun run start
       env:
         DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
         DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
         LLM_API: ${{ secrets.LLM_API }}
         DATABASE: ${{ secrets.DATABASE }}
         MONGO: ${{ secrets.MONGO }}
-
-    - name: Debug Environment
-      run: |
-        echo "Checking PATH..."
-        echo "$PATH"
-        echo "Current directory..."
-        pwd
-        echo "List files..."
-        ls -la
