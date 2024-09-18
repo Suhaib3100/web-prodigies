@@ -20,17 +20,17 @@ jobs:
 
     - name: Verify Bun Installation
       run: |
-        export PATH="$HOME/.bun/bin:$PATH"
+        source $HOME/.bashrc  # Ensure .bashrc is sourced to include Bun in the PATH
         bun --version
 
     - name: Install Dependencies
       run: |
-        export PATH="$HOME/.bun/bin:$PATH"
+        source $HOME/.bashrc  # Ensure .bashrc is sourced to include Bun in the PATH
         bun install
 
     - name: Start Bot
       run: |
-        export PATH="$HOME/.bun/bin:$PATH"
+        source $HOME/.bashrc  # Ensure .bashrc is sourced to include Bun in the PATH
         bun run start
       env:
         DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
@@ -38,3 +38,12 @@ jobs:
         LLM_API: ${{ secrets.LLM_API }}
         DATABASE: ${{ secrets.DATABASE }}
         MONGO: ${{ secrets.MONGO }}
+
+    - name: Debug Environment
+      run: |
+        echo "Checking PATH..."
+        echo "$PATH"
+        echo "Current directory..."
+        pwd
+        echo "List files..."
+        ls -la
