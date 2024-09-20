@@ -1,19 +1,14 @@
-import {
-	Client as DiscordClient,
-} from 'discord.js';
-import { env as ENV } from './env';
 import { Client } from './client';
-import type { env } from './@types/env';
+import { env as ENV } from './env';
 
 const client = new Client(ENV);
 
-
-client.loadEvents()
-client.start()
-await client.deployCommands()
-
-
-
-/**
- * @developer @uoaio discord.uoaio.xyz 
- */
+(async () => {
+  try {
+    await client.loadEvents();
+    await client.start();
+    await client.deployCommands();
+  } catch (error) {
+    console.error("Error starting the bot:", error);
+  }
+})();
