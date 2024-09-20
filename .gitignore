@@ -130,7 +130,6 @@ dist
 .pnp.*
 
 # bun
-bun.lockb
 
 # database
 db.json
