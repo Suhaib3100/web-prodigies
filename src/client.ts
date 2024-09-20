@@ -1,7 +1,8 @@
-import { Client as DiscordClient, Message, REST, Routes } from "discord.js";
+import type { env } from "@src/@types/env";
+import { Client as DiscordClient, REST, Routes } from "discord.js";
 import { events } from "./events";
 import { commands } from "./commands";
-import type { env } from "./@types/env";
+import type { command } from "./@types/command";
 import { integration_context, integration_types } from "./utils/constants";
 import { ChatGroq } from "@langchain/groq";
 import { validateGroqApiKey } from "@utils/core";
@@ -14,6 +15,10 @@ export class Client extends DiscordClient {
       allowedMentions: {
         parse: ["everyone", "roles", "users"],
       },
+      /**
+			* If your bot requires certain intents, you can specify them here.
+			* @see https://discordjs.guide/popular-topics/intents.html
+			/*/
       intents: [
         "GuildMessages",
         "Guilds",
@@ -40,24 +45,11 @@ export class Client extends DiscordClient {
   async start() {
     try {
       await this.login(this.env.DISCORD_BOT_TOKEN);
-      const ai_response = await validateGroqApiKey(this.env.LLM_API);
-      if (!ai_response) {
+      const ai_reponse = await validateGroqApiKey(this.env.LLM_API);
+      if (!ai_reponse)
         return {
-          error: new Error("Invalid API key"),
+          error: new Error("Invalid api key"),
         };
-      }
-
-      // Add message listener for mentions
-      this.on('messageCreate', async (message: Message) => {
-        // Ignore messages from bots
-        if (message.author.bot) return;
-
-        // Check if the bot was mentioned in the message
-        if (message.mentions.has(this.user!)) {
-          // Respond to the message (you can modify this part)
-          await message.reply("Hello! You mentioned me. How can I help you?");
-        }
-      });
 
       return {
         error: false,
@@ -106,7 +98,7 @@ export class Client extends DiscordClient {
     const rest = new REST({ version: "10" }).setToken(
       this.env.DISCORD_BOT_TOKEN
     );
-    await rest.put(Routes.applicationCommands(this.env.DISCORD_CLIENT_ID), {
+    rest.put(Routes.applicationCommands(this.env.DISCORD_CLIENT_ID), {
       body: data,
     });
 
@@ -115,3 +107,7 @@ export class Client extends DiscordClient {
     );
   }
 }
+
+/**
+ * @developer @uoaio discord.uoaio.xyz
+ */
